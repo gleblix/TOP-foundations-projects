@@ -1,6 +1,22 @@
-/* javascript support file for html */
+// javascript support file for html
 
-console.log("Test - is this printing to the console?");
-let a = 5;
-let b = 5;
-console.log(`Test - you should see the number 10 here: ${a+b}`);
+// Returns a random choice of ['rock', 'paper', 'scissors']
+// representing the computer's choice in the game.
+function getComputerChoice() {
+    let randomNumber = randomIntFromInterval(1, 3);
+    console.log(randomNumber)
+    switch (randomNumber) {
+        case 1:
+            return 'rock';
+        case 2:
+            return 'paper';
+        case 3:
+            return 'scissors';
+    }
+
+    // Returns a random integer from num1 (inclusive) to num2 (inclusive)
+    // Where num1, num2 both positive integers with num1 < num2
+    function randomIntFromInterval (num1, num2) {
+        return Math.floor(Math.random() * (num2 - num1 + 1)) + num1;
+    }
+}
