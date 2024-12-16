@@ -35,72 +35,92 @@ function getHumanChoice() {
     }
 }
 
-function playRound(humanChoice, computerChoice) {
-    if (humanChoice == 'rock') {
-        switch (computerChoice) {
-            case 'rock':
-                tie();
-                return;
-            case 'paper':
-                computerWins();
-                return;
-            case 'scissors':
-                humanWins();
-                return;
+function playGame() {
+
+    let humanChoice;
+    let computerChoice;
+
+    console.log("Ready to play?");
+
+    for(let step = 0; step < 5; step++) {
+        humanChoice = getHumanChoice();
+        computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
+    }
+
+
+    function playRound(humanChoice, computerChoice) {
+        if (humanChoice == 'rock') {
+            switch (computerChoice) {
+                case 'rock':
+                    tie();
+                    return;
+                case 'paper':
+                    computerWins();
+                    return;
+                case 'scissors':
+                    humanWins();
+                    return;
+            }
+        } else if (humanChoice == 'paper') {
+            switch (computerChoice) {
+                case 'rock':
+                    humanWins();
+                    return;
+                case 'paper':
+                    tie();
+                    return;
+                case 'scissors':
+                    computerWins();
+                    return;
+            }
+        } else if (humanChoice == 'scissors') {
+            switch (computerChoice) {
+                case 'rock':
+                    computerWins();
+                    return;
+                case 'paper':
+                    humanWins();
+                    return;
+                case 'scissors':
+                    tie();
+                    return;
+            }
         }
-    } else if (humanChoice == 'paper') {
-        switch (computerChoice) {
-            case 'rock':
-                humanWins();
-                return;
-            case 'paper':
-                tie();
-                return;
-            case 'scissors':
-                computerWins();
-                return;
+    
+        function tie() {
+            console.log(`It's a tie! You both chose ${capitalize(humanChoice)}.`);
+            console.log(`Computer Score: ${computerScore}`);
+            console.log(`Human Score: ${humanScore}`);
+            return;
         }
-    } else if (humanChoice == 'scissors') {
-        switch (computerChoice) {
-            case 'rock':
-                computerWins();
-                return;
-            case 'paper':
-                humanWins();
-                return;
-            case 'scissors':
-                tie();
-                return;
+    
+        function humanWins() {
+            console.log(`You win! ${capitalize(humanChoice)} ` +
+            `beats ${capitalize(computerChoice)}.`);
+            humanScore++;
+            console.log(`Computer Score: ${computerScore}`);
+            console.log(`Human Score: ${humanScore}`);
+            return;
+        }
+    
+        function computerWins() {
+            console.log(`The Computer wins! ${capitalize(computerChoice)} ` +
+            `beats ${capitalize(humanChoice)}.`);
+            computerScore++;
+            console.log(`Computer Score: ${computerScore}`);
+            console.log(`Human Score: ${humanScore}`);
+            return;
         }
     }
 
-    function tie() {
-        console.log(`It's a tie! You both chose ${capitalize(humanChoice)}.`);
-        console.log(`Computer Score: ${computerScore}`);
-        console.log(`Human Score: ${humanScore}`);
-        return;
-    }
 
-    function humanWins() {
-        console.log(`You win! ${capitalize(humanChoice)} ` +
-        `beats ${capitalize(computerChoice)}.`);
-        humanScore++;
-        console.log(`Computer Score: ${computerScore}`);
-        console.log(`Human Score: ${humanScore}`);
-        return;
-    }
-
-    function computerWins() {
-        console.log(`The Computer wins! ${capitalize(computerChoice)} ` +
-        `beats ${capitalize(humanChoice)}.`);
-        computerScore++;
-        console.log(`Computer Score: ${computerScore}`);
-        console.log(`Human Score: ${humanScore}`);
-        return;
-    }
 }
 
-//Utility functions
+// Immediately run game upon loading webpage
+playGame();
+
+// Utility functions / Code Library
 
 // Returns a random integer from num1 (inclusive) to num2 (inclusive)
 // Where num1, num2 both positive integers with num1 < num2
