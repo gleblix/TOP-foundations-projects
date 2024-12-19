@@ -1,9 +1,36 @@
-// javascript support file for html
-
-// Variable that tracks the user's score over one or more games.
 let humanScore = 0;
-// Variable that tracks the computer's score over one or more games.
 let computerScore = 0;
+
+const resultMessage = document.querySelector("#resultMessage");
+const humanScoreText = document.querySelector("#humanScore");
+const computerScoreText = document.querySelector("#computerScore");
+
+function updateScoreDisplay() {
+    humanScoreText.textContent = `Human Score: ${humanScore}`;
+    computerScoreText.textContent = `Computer Score: ${computerScore}`;
+}
+
+document.addEventListener('click', pressButton)
+
+// used event delegation here, as per javascript tutorial
+// all click events 
+function pressButton(e) {
+    let id = e.target.getAttribute('id');
+    if (id == 'reset') {
+        resetGame();
+    } else if (id == 'rock' || id == 'paper' || id == 'scissors') {
+        playGame(e);
+    }
+}
+
+function resetGame() {
+    humanScore = 0;
+    computerScore = 0;
+    updateScoreDisplay();
+    // Keeps spacing the same whether results are displayed or not
+    // to avoid buttons jumping around
+    resultMessage.innerHTML = '<br>'.repeat(3);
+}
 
 // Returns a random choice of ['rock', 'paper', 'scissors']
 // representing the computer's choice in the game.
@@ -19,35 +46,10 @@ function getComputerChoice() {
     }
 }
 
-// Sends a prompt to the CLI requesting the user's choice of rock
-// paper, scissors. If the user types a valid choice, that choice is
-// returned (in lowercase). If the user types an invalid choice, 'rock'
-// is returned.
-function getHumanChoice() {
-    let input = prompt("Choose rock, paper, or scissors: ");
-    input = input.toLowerCase();
-
-    if (input == 'rock' || input == 'paper' || input == 'scissors') {
-        return input;
-    }
-    else {
-        return 'rock';
-    }
-}
-
-function playGame() {
-
-    let humanChoice;
-    let computerChoice;
-
-    console.log("Ready to play?");
-
-    for(let step = 0; step < 5; step++) {
-        humanChoice = getHumanChoice();
-        computerChoice = getComputerChoice();
-        playRound(humanChoice, computerChoice);
-    }
-
+function playGame(e) {
+    let humanChoice = e.target.getAttribute('id');
+    let computerChoice = getComputerChoice();
+    playRound(humanChoice, computerChoice);
 
     function playRound(humanChoice, computerChoice) {
         if (humanChoice == 'rock') {
@@ -87,38 +89,30 @@ function playGame() {
                     return;
             }
         }
-    
-        function tie() {
-            console.log(`It's a tie! You both chose ${capitalize(humanChoice)}.`);
-            console.log(`Computer Score: ${computerScore}`);
-            console.log(`Human Score: ${humanScore}`);
-            return;
-        }
-    
-        function humanWins() {
-            console.log(`You win! ${capitalize(humanChoice)} ` +
-            `beats ${capitalize(computerChoice)}.`);
-            humanScore++;
-            console.log(`Computer Score: ${computerScore}`);
-            console.log(`Human Score: ${humanScore}`);
-            return;
-        }
-    
-        function computerWins() {
-            console.log(`The Computer wins! ${capitalize(computerChoice)} ` +
-            `beats ${capitalize(humanChoice)}.`);
-            computerScore++;
-            console.log(`Computer Score: ${computerScore}`);
-            console.log(`Human Score: ${humanScore}`);
-            return;
-        }
     }
 
+    function tie() {
+        resultMessage.innerHTML = `You chose ${capitalize(humanChoice)}.<br>
+        The Computer chose ${capitalize(computerChoice)}.<br>
+        It's a tie!`;
+    }
 
+    function humanWins() {
+        resultMessage.innerHTML = `You chose ${capitalize(humanChoice)}.<br>
+        The Computer chose ${capitalize(computerChoice)}.<br>
+        You win!`;
+        humanScore++;
+        updateScoreDisplay();
+    }
+
+    function computerWins() {
+        resultMessage.innerHTML = `You chose ${capitalize(humanChoice)}.<br>
+        The Computer chose ${capitalize(computerChoice)}.<br>
+        The Computer wins!`;
+        computerScore++;
+        updateScoreDisplay();
+    }
 }
-
-// Immediately run game upon loading webpage
-playGame();
 
 // Utility functions / Code Library
 
@@ -132,3 +126,7 @@ function randomIntFromInterval (num1, num2) {
 function capitalize(string) {
     return string.slice(0,1).toUpperCase() + string.slice(1);
 }
+
+//let event1 = new Event('click', {bubbles: true});
+//let rockBtn = document.querySelector('#rock');
+//rockBtn.dispatchEvent(event1);
